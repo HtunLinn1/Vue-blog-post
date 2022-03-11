@@ -12,9 +12,11 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <h3>
-          Comments <span v-if="comments.length != 0" class="caption">{{ comments.length }}</span>
-        </h3>
+        <div ref="comments">
+          <h3>
+            Comments <span v-if="comments.length != 0" class="caption">{{ comments.length }}</span>
+          </h3>
+        </div>
         <div
           v-for="com in sliceComments"
           :key="com.id"
@@ -58,9 +60,11 @@
           label="comment"
           class="pt-3"
         />
-        <v-btn color="primary" @click="clickComment">
-          comment
-        </v-btn>
+        <div class="text-center">
+          <v-btn color="primary" @click="clickComment">
+            comment
+          </v-btn>
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -73,6 +77,7 @@ import { auth, db } from '../plugins/firebase'
 const commentsCollectionRef = collection(db, 'comments')
 export default {
   name: 'BlogPage',
+  scrollToTop: true,
   data () {
     return {
       name: '',
@@ -82,7 +87,8 @@ export default {
       comments: [],
       arrowUp: false,
       arrowDown: true,
-      sliceComments: []
+      sliceComments: [],
+      commentsHash: this.$route.hash
     }
   },
   computed: {
@@ -94,8 +100,24 @@ export default {
     this.onAuthStateChanged()
     this.getBlog()
     this.getComments()
+    this.commentsHashMethod()
   },
   methods: {
+    // link hash comments
+    commentsHashMethod () {
+      this.$nextTick(function () {
+        if (this.commentsHash) {
+          const refName = this.commentsHash.replace('#', '')
+          setTimeout(() => {
+            this.scrollToAnchorPoint(refName)
+          }, 200)
+        }
+      })
+    },
+    scrollToAnchorPoint (refName) {
+      const el = this.$refs[refName]
+      el.scrollIntoView({ behavior: 'smooth' })
+    },
     onAuthStateChanged () {
       onAuthStateChanged(auth, (user) => {
         if (user) {

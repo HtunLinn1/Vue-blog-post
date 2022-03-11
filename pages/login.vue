@@ -28,7 +28,7 @@
         :type="showPassword ? 'text' : 'password'"
         @click:append="showPassword = !showPassword"
       />
-      <v-btn @click="login">
+      <v-btn color="primary" @click="login">
         Login
       </v-btn>
       <div class="pt-4">

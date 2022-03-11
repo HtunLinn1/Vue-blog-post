@@ -1,7 +1,7 @@
 <template>
   <v-app-bar
     app
-    color="gray"
+    color="#95A5A6"
     flat
   >
     <v-avatar
@@ -17,17 +17,19 @@
     </v-avatar>
     <div class="pl-3">
       <nuxt-link to="/">
-        <h3>Blog Post</h3>
+        <h3 class="text">
+          Blog Post
+        </h3>
       </nuxt-link>
     </div>
     <v-spacer />
-    <div v-if="$store.getters.isAuthenticated" class="pt-4 pr-3">
-      <p>
-        <v-icon>
+    <div v-if="$store.getters.isAuthenticated" class="pr-3">
+      <h3 class="text pr-5">
+        <v-icon color="white">
           mdi-account
         </v-icon>
-        {{ user.displayName }}
-      </p>
+        <b>{{ user.displayName }}</b>
+      </h3>
     </div>
     <v-responsive max-width="100">
       <v-btn
@@ -86,5 +88,8 @@ a,
 a:visited {
   text-decoration: none;
   color: inherit;
+}
+.text {
+  color: white;
 }
 </style>

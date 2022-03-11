@@ -30,7 +30,7 @@
           />
         </v-col>
         <v-col cols="12">
-          <v-btn type="submit">
+          <v-btn type="submit" color="primary">
             add
           </v-btn>
         </v-col>
@@ -69,9 +69,9 @@ export default {
           created_by: this.user.email,
           created_at: new Date()
         }).then(() => {
+          this.$router.push({ name: 'index', params: { success: this.name + 'を作成しました' } })
           this.name = ''
           this.description = ''
-          this.$router.push('/')
         })
       } else {
         this.message = '入力エラーがあります'

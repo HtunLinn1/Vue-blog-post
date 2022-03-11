@@ -1,57 +1,69 @@
 <template>
-  <v-container class="pt-15">
+  <v-container class="pt-15" fluid>
     <h1 class="text-center pt-3 pb-3">
       Blog List
     </h1>
-    <v-row v-if="blogs.length != 0">
-      <v-col v-for="blog in blogs" :key="blog.id" cols="12" sm="6" md="4">
-        <v-card>
-          <v-card-title>
-            <nuxt-link :to="{ name: 'blog', query: { id: blog.id }}">
-              {{ blog.name }}
-            </nuxt-link>
-          </v-card-title>
-          <v-card-subtitle class="description">
-            {{ blog.description.trim() }}
-          </v-card-subtitle>
-          <v-card-actions>
-            <v-btn icon color="primary" :to="{ name: 'blog', query: { id: blog.id }}">
-              <v-icon color="primary" small>
-                mdi-comment-processing
-              </v-icon>
-            </v-btn>
-            <p v-if="blog.commentCount != 0" class="caption">
-              {{ blog.commentCount }}
-            </p>
-            <v-spacer />
-            <v-btn v-if="$store.getters.isAuthenticated && blog.created_by == $store.state.user.email" icon color="primary" @click="edit(blog)">
-              <v-icon small>
-                mdi-book-edit
-              </v-icon>
-            </v-btn>
-            <v-btn v-if="$store.getters.isAuthenticated && blog.created_by == $store.state.user.email" icon color="error" @click="remove(blog)">
-              <v-icon small>
-                mdi-delete
-              </v-icon>
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row v-else class="text-center">
-      <v-col>
-        <v-card>
-          <v-card-title>
-            Blog is empty!
-          </v-card-title>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-spacer />
-    <div v-if="$store.getters.isAuthenticated" class="pt-5">
-      <v-btn color="primary" @click="addBlog">
-        Add Blog
-      </v-btn>
+    <v-alert
+      v-if="success"
+      border="top"
+      type="success"
+      dark
+    >
+      {{ success }}
+    </v-alert>
+    <div class="blogs">
+      <v-row v-if="blogs.length != 0">
+        <v-col v-for="blog in blogs" :key="blog.id" cols="12" sm="6" md="4">
+          <v-card>
+            <v-card-title>
+              <nuxt-link :to="{ name: 'blog', query: { id: blog.id }}">
+                {{ blog.name }}
+              </nuxt-link>
+            </v-card-title>
+            <v-card-subtitle class="description">
+              {{ blog.description.trim() }}
+            </v-card-subtitle>
+            <v-card-actions>
+              <v-btn icon color="primary" :to="{ name: 'blog', hash: '#comments', query: { id: blog.id }}">
+                <v-icon color="success" small>
+                  mdi-comment-processing
+                </v-icon>
+              </v-btn>
+              <p v-if="blog.commentCount != 0" class="caption">
+                {{ blog.commentCount }}
+              </p>
+              <v-spacer />
+              <v-btn v-if="$store.getters.isAuthenticated && blog.created_by == $store.state.user.email" icon color="primary" @click="edit(blog)">
+                <v-icon small>
+                  mdi-book-edit
+                </v-icon>
+              </v-btn>
+              <v-btn v-if="$store.getters.isAuthenticated && blog.created_by == $store.state.user.email" icon color="error" @click="remove(blog)">
+                <v-icon small>
+                  mdi-delete
+                </v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row v-else class="text-center">
+        <v-col>
+          <v-card>
+            <v-card-title>
+              Blog is empty!
+            </v-card-title>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-spacer />
+      <div v-if="$store.getters.isAuthenticated" class="pt-5">
+        <v-btn color="green" rounded class="add_blog" @click="addBlog">
+          <v-icon e-large color="white">
+            mdi-plus
+          </v-icon>
+        </v-btn>
+      </div>
     </div>
   </v-container>
 </template>
@@ -71,13 +83,19 @@ export default {
       tempBlogs: [],
       name: '',
       email: '',
-      selectedComments: []
+      selectedComments: [],
+      success: this.$route.params.success
     }
   },
   computed: {
     user () {
       return this.$store.state.user
     }
+  },
+  created () {
+    setTimeout(() => {
+      this.success = false
+    }, 1000)
   },
   mounted () {
     this.onAuthStateChanged()
@@ -139,6 +157,7 @@ export default {
           })
         })
         deleteDoc(blogDocumentRef)
+        this.success = ''
         // updateDoc(userDocumentRef, { address: 'Yokohama' })
       }
     },
@@ -157,5 +176,15 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.add_blog {
+  position: fixed;
+  bottom: 100px;
+  right: 40px;
+}
+
+.blogs {
+  position: relative;
 }
 </style>
