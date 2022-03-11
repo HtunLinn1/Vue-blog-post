@@ -1,7 +1,7 @@
 <template>
   <v-container class="pt-15">
     <h1 class="text-center pt-3 pb-3">
-      Blog List
+      Blog List1
     </h1>
     <v-row v-if="blogs.length != 0">
       <v-col v-for="blog in blogs" :key="blog.id" cols="12" sm="6" md="4">
