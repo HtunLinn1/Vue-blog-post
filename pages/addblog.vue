@@ -67,6 +67,7 @@ export default {
           name: this.name,
           description: this.description,
           created_by: this.user.email,
+          blogger: this.user.displayName,
           created_at: new Date()
         }).then(() => {
           this.$router.push({ name: 'index', params: { success: this.name + 'を作成しました' } })

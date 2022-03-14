@@ -33,6 +33,10 @@
               <nuxt-link :to="{ name: 'blog', query: { id: blog.id }}">
                 {{ blog.name }}
               </nuxt-link>
+              <v-spacer />
+              <span class="caption font-weight-bold">
+                {{ blog.blogger }} blogger
+              </span>
             </v-card-title>
             <v-card-subtitle class="description">
               {{ blog.description.trim() }}
