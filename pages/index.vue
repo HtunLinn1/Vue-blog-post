@@ -1,8 +1,22 @@
 <template>
   <v-container class="pt-15" fluid>
-    <h1 class="text-center pt-3 pb-3">
-      Blog List
-    </h1>
+    <v-row class="d-flex justify-space-between mb-6 pt-3">
+      <v-col />
+      <v-col>
+        <h1 class="text-center pt-3 pb-3">
+          Blogs
+        </h1>
+      </v-col>
+      <v-col>
+        <v-text-field v-model="searchBlogName" label="Search">
+          <template #append-outer>
+            <v-btn icon @click="searchBlog()">
+              <v-icon>mdi-magnify</v-icon>
+            </v-btn>
+          </template>
+        </v-text-field>
+      </v-col>
+    </v-row>
     <v-alert
       v-if="success"
       border="top"
@@ -58,11 +72,23 @@
       </v-row>
       <v-spacer />
       <div v-if="$store.getters.isAuthenticated" class="pt-5">
-        <v-btn color="green" rounded class="add_blog" @click="addBlog">
-          <v-icon e-large color="white">
-            mdi-plus
-          </v-icon>
-        </v-btn>
+        <v-tooltip bottom>
+          <template #activator="{ on, attrs }">
+            <v-btn
+              color="green"
+              rounded
+              class="add_blog"
+              v-bind="attrs"
+              @click="addBlog"
+              v-on="on"
+            >
+              <v-icon e-large color="white">
+                mdi-plus
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>add blog</span>
+        </v-tooltip>
       </div>
     </div>
   </v-container>
@@ -84,7 +110,8 @@ export default {
       name: '',
       email: '',
       selectedComments: [],
-      success: this.$route.params.success
+      success: this.$route.params.success,
+      searchBlogName: ''
     }
   },
   computed: {
@@ -95,7 +122,12 @@ export default {
   created () {
     setTimeout(() => {
       this.success = false
-    }, 1000)
+    }, 2000)
+  },
+  updated () {
+    if (this.searchBlogName === '') {
+      this.onSnapShotBlogs()
+    }
   },
   mounted () {
     this.onAuthStateChanged()
@@ -139,6 +171,13 @@ export default {
           this.blogs = this.tempBlogs
         })
       })
+    },
+    searchBlog () {
+      if (this.searchBlogName.trim()) {
+        this.blogs = this.blogs.filter(blog => blog.name.toUpperCase().includes(this.searchBlogName.trim().toUpperCase()))
+      } else if (this.searchBlogName.trim() === '') {
+        this.onSnapShotBlogs()
+      }
     },
     remove (blog) {
       if (confirm(blog.name + 'を削除よろしいですか?')) {

@@ -23,7 +23,7 @@
         >
           <span class="content">{{ com.comment }}</span>
           &nbsp;
-          <span class="caption">
+          <span class="caption font-weight-bold">
             {{ com.created_at.toDate() | datetime }}
           </span> &nbsp;
           <v-btn v-if="$store.getters.isAuthenticated && com.created_by == $store.state.user.email" icon color="error" @click="remove(com.id)">
