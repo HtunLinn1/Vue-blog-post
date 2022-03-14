@@ -1,13 +1,13 @@
 <template>
   <v-container class="pt-15" fluid>
-    <v-row class="d-flex justify-space-between mb-6 pt-3">
-      <v-col />
-      <v-col>
+    <v-row class="mb-6 pt-3">
+      <v-col cols="12" sm="6" md="4" />
+      <v-col cols="12" sm="6" md="4">
         <h1 class="text-center pt-3 pb-3">
           Blogs
         </h1>
       </v-col>
-      <v-col>
+      <v-col cols="12" sm="6" md="4">
         <v-text-field v-model="searchBlogName" label="Search">
           <template #append-outer>
             <v-btn icon @click="searchBlog()">

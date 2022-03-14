@@ -146,7 +146,7 @@ export default {
       onSnapshot(q, (querySnapshot) => {
         this.comments = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
         this.comments = this.comments.sort((a, b) => a.created_at > b.created_at ? 1 : -1)
-        this.clickArrowUp()
+        this.clickArrowDown()
       })
 
       // this.comments = []
@@ -191,7 +191,7 @@ export default {
     remove (id) {
       const blogDocumentRef = doc(db, 'comments', id)
       deleteDoc(blogDocumentRef)
-      this.getComments()
+      // this.getComments()
       // updateDoc(userDocumentRef, { address: 'Yokohama' })
     },
     clickArrowDown () {
