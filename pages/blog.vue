@@ -1,5 +1,13 @@
 <template>
   <v-container class="pt-15" fluid-width>
+    <v-alert
+      v-if="success"
+      border="top"
+      type="success"
+      dark
+    >
+      {{ success }}
+    </v-alert>
     <v-row>
       <v-col cols="12">
         <h1 class="pt-3">
@@ -88,13 +96,19 @@ export default {
       arrowUp: false,
       arrowDown: true,
       sliceComments: [],
-      commentsHash: this.$route.hash
+      commentsHash: this.$route.hash,
+      success: this.$route.params.success
     }
   },
   computed: {
     user () {
       return this.$store.state.user
     }
+  },
+  created () {
+    setTimeout(() => {
+      this.success = false
+    }, 2000)
   },
   mounted () {
     this.onAuthStateChanged()

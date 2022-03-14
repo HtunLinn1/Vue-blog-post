@@ -81,7 +81,7 @@ export default {
           name: this.name,
           description: this.description
         })
-        this.$router.push({ name: 'index', params: { success: this.name + 'を更新しました' } })
+        this.$router.push({ name: 'blog', query: { id: this.$route.query.id }, params: { success: this.name + 'を更新しました' } })
       } else {
         this.message = '入力エラーがあります'
       }
